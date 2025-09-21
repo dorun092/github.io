@@ -30,7 +30,7 @@ jobs:
           RSS_URL: https://rss.blog.naver.com/do_run_.xml
           SITE_TITLE: "네이버 블로그 최신 글"
           SITE_DESC: "네이버 블로그 최신 글 모음 (자동 갱신)"
-          SITE_META: "<meta name="google-site-verification" content="UevNLqf1T48vR6HMj35XBh-kLv_5gSru1_Un9WTym3E" />"
+          SITE_META: '<meta name="google-site-verification" content="UevNLqf1T48vR6HMj35XBh-kLv_5gSru1_Un9WTym3E" />'
           MAX_ITEMS: "40"
         run: python scripts/build_rss.py
 
