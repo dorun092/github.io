@@ -3,7 +3,7 @@ import feedparser
 from html import escape
 
 BASE_URL = os.environ.get("BASE_URL", "").rstrip("/")
-RSS_URL = os.environ.get("RSS_URL", "https://rss.blog.naver.com/네이버아이디.xml")
+RSS_URL = os.environ.get("RSS_URL", "https://rss.blog.naver.com/do_run_.xml")
 SITE_TITLE = os.environ.get("SITE_TITLE", "네이버 블로그 최신 글")
 SITE_DESC = os.environ.get("SITE_DESC", "네이버 블로그 최신 글 모음 (자동 갱신)")
 SITE_META = os.environ.get("SITE_META", "")
