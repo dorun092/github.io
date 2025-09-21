@@ -6,6 +6,7 @@ RSS_URL = os.environ.get("RSS_URL", "https://rss.blog.naver.com/네이버아이�
 SITE_TITLE = os.environ.get("SITE_TITLE", "네이버 블로그 최신 글")
 SITE_DESC = os.environ.get("SITE_DESC", "네이버 블로그 최신 글 모음 (자동 갱신)")
 MAX_ITEMS = int(os.environ.get("MAX_ITEMS", "30"))
+SITE_META = os.environ.get("SITE_META", "")
 
 def render_html(entries):
     list_items = []
@@ -22,6 +23,7 @@ def render_html(entries):
     <html lang="ko">
     <head>
       <meta charset="utf-8">
+      {SITE_META}
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <title>{escape(SITE_TITLE)}</title>
       <meta name="description" content="{escape(SITE_DESC)}">
