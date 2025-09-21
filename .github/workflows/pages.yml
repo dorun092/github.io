@@ -1,0 +1,49 @@
+name: Build & Deploy Pages (RSS → HTML)
+on:
+  workflow_dispatch: {}
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: "0 */3 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install feedparser
+
+      - name: Build static site from RSS
+        env:
+          RSS_URL: https://rss.blog.naver.com/do_run_.xml
+          SITE_TITLE: "네이버 블로그 최신 글"
+          SITE_DESC: "네이버 블로그 최신 글 모음 (자동 갱신)"
+          MAX_ITEMS: "40"
+        run: python scripts/build_rss.py
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
