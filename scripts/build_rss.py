@@ -151,5 +151,5 @@ def build():
     (OUT_DIR / "sitemap.xml").write_text(sitemap, encoding="utf-8")
 
 if __name__ == "__main__":
-    assert BASE_URL, "BASE_URL 환경변수를 설정하세요. 예: https://dorun092.github.io/github.io"
+    assert BASE_URL, "BASE_URL 환경변수를 설정하세요. 예: https://dorun092.github.io"
     build()
