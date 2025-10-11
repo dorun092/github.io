@@ -28,7 +28,7 @@ jobs:
 
       - name: Build static site from RSS
         env:
-          BASE_URL: https://dorun092.github.io/github.io
+          BASE_URL: https://dorun092.github.io
           RSS_URL: https://rss.blog.naver.com/do_run_.xml
           SITE_TITLE: "네이버 블로그 최신 글"
           SITE_DESC: "네이버 블로그 최신 글 모음 (자동 갱신)"
