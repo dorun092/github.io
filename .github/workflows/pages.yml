@@ -5,7 +5,8 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: "0 */6 * * *"   # 6시간마다
+#    - cron: "0 */6 * * *"   # 6시간마다
+    - cron: "0 * * * 1"
 
 permissions:
   contents: read
