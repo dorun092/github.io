@@ -37,9 +37,6 @@ jobs:
           MAX_ITEMS: "40"
         run: python scripts/build_rss.py
 
-      - name: Make script executable
-        run: chmod +x scripts/post_blogger.py
-
       - name: Run blogger poster
         env:
           GCP_CLIENT_ID: ${{ secrets.GCP_CLIENT_ID }}
@@ -48,7 +45,7 @@ jobs:
           BLOG_ID: "580830179711521471"
           RSS_URL: "https://rss.blog.naver.com/do_run_.xml"
           MAX_POSTS: "1"
-        run: scripts/post_blogger.py
+        run: python -u scripts/post_blogger.py
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
