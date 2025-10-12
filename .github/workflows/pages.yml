@@ -37,6 +37,9 @@ jobs:
           MAX_ITEMS: "40"
         run: python scripts/build_rss.py
 
+      - name: Make script executable
+        run: chmod +x scripts/post_blogger.py
+
       - name: Run blogger poster
         env:
           GCP_CLIENT_ID: ${{ secrets.GCP_CLIENT_ID }}
