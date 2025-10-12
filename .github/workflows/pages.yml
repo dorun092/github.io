@@ -25,7 +25,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install deps
-        run: pip install feedparser
+        run: pip install feedparser requests
 
       - name: Build static site from RSS
         env:
@@ -36,6 +36,16 @@ jobs:
           SITE_META: '<meta name="google-site-verification" content="UevNLqf1T48vR6HMj35XBh-kLv_5gSru1_Un9WTym3E" />'
           MAX_ITEMS: "40"
         run: python scripts/build_rss.py
+
+      - name: Run blogger poster
+        env:
+          GCP_CLIENT_ID: ${{ secrets.GCP_CLIENT_ID }}
+          GCP_CLIENT_SECRET: ${{ secrets.GCP_CLIENT_SECRET }}
+          GCP_REFRESH_TOKEN: ${{ secrets.GCP_REFRESH_TOKEN }}
+          BLOG_ID: "580830179711521471"
+          RSS_URL: "https://rss.blog.naver.com/do_run_.xml"
+          MAX_POSTS: "1"
+        run: python post_blogger.py
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
