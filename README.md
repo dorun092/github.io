@@ -1,2 +1,2 @@
-# github action test
-- action test
+# Github action test
+- Action test
