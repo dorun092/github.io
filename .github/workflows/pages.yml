@@ -5,7 +5,8 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: "0 */6 * * *"   # 6시간마다
+    - "0 0 */1 * *" # 1일마다
+#    - cron: "0 */6 * * *"   # 6시간마다
 #    - cron: "0 * * * 1"
 
 permissions:
@@ -14,7 +15,7 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  build_pages:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +26,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install deps
-        run: pip install feedparser requests
+        run: pip install -U feedparser requests
 
       - name: Build static site from RSS
         env:
@@ -35,8 +36,38 @@ jobs:
           SITE_DESC: "네이버 블로그 최신 글 모음 (자동 갱신)"
           SITE_META: '<meta name="google-site-verification" content="UevNLqf1T48vR6HMj35XBh-kLv_5gSru1_Un9WTym3E" />'
           MAX_ITEMS: "40"
-        run: python scripts/build_rss.py
+        run: |
+          set -euo pipefail
+          python scripts/build_rss.py
+          test -d dist && ls -l dist
 
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy_pages:
+    needs: build_pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  post_to_blogger:
+    # 페이지 배포와 독립적으로 실행 + 실패해도 워크플로 전체 성공 유지
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deps
+        run: pip install -U feedparser requests
       - name: Run blogger poster
         env:
           GCP_CLIENT_ID: ${{ secrets.GCP_CLIENT_ID }}
@@ -45,19 +76,7 @@ jobs:
           BLOG_ID: "580830179711521471"
           RSS_URL: "https://rss.blog.naver.com/do_run_.xml"
           MAX_POSTS: "1"
-        run: python -u scripts/post_blogger.py
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+        run: |
+          set -euo pipefail
+          python -u scripts/post_blogger.py
+        continue-on-error: true
