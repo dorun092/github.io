@@ -5,7 +5,7 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - "0 0 */1 * *" # 1일마다
+    - "0 0 * * *" # 1일마다
 #    - cron: "0 */6 * * *"   # 6시간마다
 #    - cron: "0 * * * 1"
 
